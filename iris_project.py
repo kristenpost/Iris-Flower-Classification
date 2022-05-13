@@ -6,7 +6,7 @@ import turtle
 def create_table(filename):
     """
     sig: str -> tuple(list(float), list(float), list(str))
-    Given a file name, read the file into a tuple containing
+    Given a file name, reads the file into a tuple containing
     two lists of type float and one list of type string.
     The features of the dataset should be of type float
     and the label should be of type string. 
@@ -27,7 +27,7 @@ def create_table(filename):
 def print_range_max_min(data):
     """
     sig: tuple(list(float), list(float)) -> NoneType
-    Print the max, min and range of both features in the dataset.
+    Prints the max, min and range of both features in the dataset.
     """
     max_length = max(data[0])
     min_length = min(data[0])
@@ -44,7 +44,7 @@ def print_range_max_min(data):
 def find_mean(feature):
     """
     sig: list(float) -> float
-    Return the mean of the feature.
+    Returns the mean of the feature.
     """
     sum_nums = 0.0
     for num in feature:
@@ -55,7 +55,7 @@ def find_mean(feature):
 def find_std_dev(feature, mean):
     """
     sig: list(float), float -> float
-    Return the standard deviation of the feature. 
+    Returns the standard deviation of the feature. 
     """
     sq_sum_diff = 0.0
     for num in feature:
@@ -66,26 +66,30 @@ def find_std_dev(feature, mean):
 def normalize_data(data):
     """
     sig: tuple(list(float), list(float), list(str)) -> NoneType
-    Print the mean and standard deviation for each feature.
-    Normalize the features in the dataset by
+    Prints the mean and standard deviation for each feature.
+    Then, normalizes the features in the dataset by
     rescaling all the values in a particular feature
     in terms of a mean of 0 and a standard deviation of 1.
-    Print the mean and the standard deviation for each feature, now normalized.
-    After normalization, each of your features should display a mean of 0
+    Afterwards, prints the mean and the standard deviation for each feature, now normalized,
+    to make sure each of the features display a mean of 0
     or very close to 0 and a standard deviation of 1 or very close to 1. 
-    """ 
-    feat1_mean = find_mean(data[0]) # Recall: feature 1 references the lengths.
+    """
+    # Recall: feature 1 references the lengths.
+    feat1_mean = find_mean(data[0])
     feat1_stddev = find_std_dev(data[0], feat1_mean)
     print("Feature 1 - mean:", str(feat1_mean), "standard deviation:", str(feat1_stddev))
-    for i in range(len(data[0])):   # Here, I am modifying a list of lengths by reassigning values at index "i" with their normalized values.
+    # Here, I am modifying a list of lengths by reassigning values at index "i" with their normalized values.
+    for i in range(len(data[0])):
         data[0][i] = (data[0][i] - feat1_mean)/feat1_stddev 
     feat1_norm_mean = find_mean(data[0])
     feat1_norm_stddev = find_std_dev(data[0], feat1_norm_mean)
     print("Feature 1 after normalization - mean:", str(feat1_norm_mean), "standard deviation:", str(feat1_norm_stddev))
-    feat2_mean = find_mean(data[1]) # Recall: feature 2 references the widths.
+    # Recall: feature 2 references the widths.
+    feat2_mean = find_mean(data[1])
     feat2_stddev = find_std_dev(data[1], feat2_mean)
     print("Feature 2 - mean:", str(feat2_mean), "standard deviation:", str(feat2_stddev))
-    for i in range(len(data[1])):  # Here, I am modifying a list of widths by reassigning values at index "i" with their normalized values. 
+    # Here, I am modifying a list of widths by reassigning values at index "i" with their normalized values.
+    for i in range(len(data[1])): 
         data[1][i] = (data[1][i] - feat2_mean)/feat2_stddev
     feat2_norm_mean = find_mean(data[1])
     feat2_norm_stddev = find_std_dev(data[1], feat2_norm_mean)
@@ -95,24 +99,26 @@ def normalize_data(data):
 def make_predictions(train_set, test_set):
     """
     sig: tuple(list(float), list(float), list(str)), tuple(list(float), list(float), list(str)) -> list(str)
-    For each observation in the test set, you'll need to check all of
+    For each observation in the test set, check all of
     the observations in the training set to see which is the `nearest neighbor.'
-    The function should make a call to the function find_dist.
-    Accumulate a list of predicted iris types for each of the test set
-    observations. Return this prediction list.
+    The function makes a call to the function find_dist.
+    Accumulates a list of predicted iris types for each of the test set
+    observations. Returns this prediction list.
     """
     pred_lst = []
     test_set_lengths = test_set[0]
     test_set_widths = test_set[1]
     test_set_labels = test_set[2]
     lst_tuples_test = []
-    for i in range(len(test_set_widths)): # In this for-loop, I'm creating a tuple(list(lengths), list(widths)) of values from the test_set.
+    # In this for-loop, I'm creating a tuple(list(lengths), list(widths)) of values from the test_set.
+    for i in range(len(test_set_widths)):
         lst_tuples_test.append((test_set_lengths[i], test_set_widths[i]))
     train_set_lengths = train_set[0]
     train_set_widths = train_set[1]
     train_set_labels = train_set[2]
     lst_tuples_train = []
-    for i in range(len(train_set_widths)): # In this for-loop, I'm creating a tuple(list(lengths), list(widths)) of values from the train_set.
+    # In this for-loop, I'm creating a tuple(list(lengths), list(widths)) of values from the train_set.
+    for i in range(len(train_set_widths)):
         lst_tuples_train.append((train_set_lengths[i], train_set_widths[i]))
     for (length1, width1) in lst_tuples_test:
         '''
@@ -142,19 +148,17 @@ def make_predictions(train_set, test_set):
 def find_dist(x1, y1, x2, y2):
     """
     sig: float, float, float, float -> float
-    Return the Euclidean distance between two points (x1, y1), (x2, y2).
+    Returns the Euclidean distance between two points (x1, y1), (x2, y2).
     """
     distance = math.sqrt((x2 - x1)**2 + (y2 - y1)**2)
     return distance
 
 def find_error(test_data, pred_lst):
     """
-    sig: tuple(list(float), list(float), list(str)) -> float
-    ### I believe the sig instead takes in a
-    ### tuple(list(float), list(float), list(str)), lst(str) -> float
-    Check the prediction list against the actual labels for
+    sig: tuple(list(float), list(float), list(str)), lst(str)) -> float
+    Checks the prediction list against the actual labels for
     the test set to determine how many errors were made.
-    Return a percentage of how many observations in the
+    Returns a percentage of how many observations in the
     test set were predicted incorrectly. 
     """
     true_labels_lst = test_data[2]
@@ -176,23 +180,20 @@ def plot_data(train_data, test_data, pred_lst):
     """
     sig: tuple(list(float), list(float), list(str)), tuple(list(float), list(float), list(str)), list(str)
         -> NoneType
-    Plot the results using the turtle module. 
-    Plot each observation from your training set on the plane, using a circle shape
-    and a different color for each type of iris. Use the value of the first feature
+    Plots the results using the turtle module. 
+    Plots each observation from the training set on the plane, using a circle shape
+    and a different color for each type of iris. Uses the value of the first feature
     for the x-coordinate and the value of the second feature for the y-coordinate.
-    Use a dot size of 10. Recall that the features have been normalized to have a mean
-    of 0 and a standard deviation of 1. You will need to `stretch' your features across
+    Recall that the features have been normalized to have a mean
+    of 0 and a standard deviation of 1. Thus, we will need to `stretch' the features across
     the axes to make the best use of the 500 x 500 window.
-    Ensure that none of your points are plotted off screen.
-    Also plot each correct prediction from your test
-    set in the corresponding color. Use a square to indicate that the value is a prediction.
-    Plot the incorrect predictions that were made for the test set in red, also using a
-    square to indicate that it was a prediction. Include a key in the upper left
-    corner of the plot as shown in the sample plot. The function will make a call
-    to the function draw_key in order to accomplish this task.
+    A square will indicate that the value is a prediction.
+    Incorrect predictions that were made for the test set will be in red, also using a
+    square to indicate that it was a prediction.
     """
     draw_grid()
-    for i in range(len(train_data[0])): # Here, I am plotting the trainee coordinates.
+    # Here, I am plotting the trainee coordinates.
+    for i in range(len(train_data[0])):
         turtle.setposition(125 * train_data[0][i] + 250, 125 * train_data[1][i] + 250)
         '''
         Accounting for my origin actually being at (250, 250) instead of (0,0)
@@ -208,7 +209,7 @@ def plot_data(train_data, test_data, pred_lst):
         turtle.pendown()
         turtle.dot(10)
         turtle.penup()
-    for x in range(len(test_data[0])):  # Now, I will plot the coordinates of my predicted values.
+    for x in range(len(test_data[0])):
         turtle.setposition(125 * test_data[0][x] + 250, 125 * test_data[1][x] + 250)
         if test_data[2][x] == pred_lst[x]:
             if test_data[2][x] == 'Iris-setosa':
@@ -228,10 +229,11 @@ def plot_data(train_data, test_data, pred_lst):
 def draw_key():
     """
     sig: () -> NoneType
-    Draw the legend for the plot indicating which group is shown by each color/shape combination.  
+    Draws the legend for the plot indicating which group is shown by each color/shape combination.  
     """
     down_shift = 0
-    for i in range(7):  # This for-loop is designated to drawing the shapes (with the correct color) for the key.
+    # This for-loop is designated to drawing the shapes (with the correct color) for the key.
+    for i in range(7):
         if i == 0 or i == 3:
             turtle.color("purple")
         elif i == 1 or i == 4:
@@ -250,7 +252,8 @@ def draw_key():
         down_shift -= 15
     turtle.color("black")
     down_shift = 0
-    for i in range(7):  # This for-loop is designated to writing the names for the key.
+    # This for-loop is designated to writing the names for the key.
+    for i in range(7):
         turtle.goto(70, 465 + down_shift)
         if i == 0:
             turtle.write("Iris-setosa")
@@ -272,18 +275,16 @@ def draw_key():
 def draw_grid():
     '''
     sig: () -> NoneType
-    I added (or rather separtated it from the plot_data function) this fucntion to draw the grid.
-    Set the turtle window size to 500 x 500.
-    Draw the x and y axes in the window.
-    Label the axes "petal width" and "petal length".
+    Sets the turtle window size to 500 x 500.
+    Draws and labels the x and y axes in the window.
     '''
     turtle.setworldcoordinates(0, 0, 500, 500)
     turtle.penup()
-    turtle.goto(-5,250) # I put -5 as a style technique - trying to draw the axis better.
+    turtle.goto(-5,250)
     turtle.pendown()
     turtle.forward(500)
     turtle.penup()
-    turtle.setposition(250,-5) # I put -5 as a style technique - trying to draw the axis better.
+    turtle.setposition(250,-5)
     turtle.left(90)
     turtle.pendown()
     turtle.forward(500)
@@ -299,8 +300,7 @@ def draw_grid():
 def draw_square():
     '''
     sig: () -> NoneType
-    I added this function to solely be desingated to drawing
-    the squares instead of the dots for the predicted values.
+    A separate function designated solely to drawing the square data points.
     '''
     turtle.pendown()
     turtle.begin_fill()
